@@ -28,4 +28,4 @@ def user(name):
 
 
 if __name__ == '__main__':
-    app.run(port=80,debug='false',host='192.168.0.103')
+    app.run(port=80,debug='false',host='0,0,0,0')
