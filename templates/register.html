@@ -4,18 +4,18 @@
     <meta charset="UTF-8">
     <title>注册</title>
 </head>
-<body>
+<body bgcolor="black">
     <form name="form1" action="/zhuce" method="post">
-        <a style="color: black">用户名：</a>
+        <a style="color: red">*</a>  <a style="color: white">用户名：</a>
         <input type="text" name="user_name"><br>
-        <a style="color: black">密码：</a>
+        <a style="color: red">*</a>   <a style="color: white">密码：    </a>
         <input type="password" name="user_pwd"><br>
-        <a style="color: black">邮箱：</a>
+        <a style="color: white">邮箱：</a>
         <input type="text" name="user_email"><br>
-        <a style="color: black">手机号：</a>
+        <a style="color: white">手机号：</a>
         <input type="text" name="user_phone"><br>
         <br>
-        <input type="submit" value="提交">
+        <input type="submit" value="提交"> <a style="color: burlywood">{{empt}}</a>
         <!--<input type="file">-->
     </form>
 </body>

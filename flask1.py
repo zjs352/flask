@@ -48,10 +48,10 @@ def login():
     if a == 1:
         return render_template('HomePge.html')
     elif len(passwd) == 0:
-        msg = '密码不能为空'
+        msg = '**密码不能为空**'
         return render_template('index.html', jaa = msg, jay = ip)
     else:
-        msg = '用户名或密码错误'
+        msg = '**用户名或密码错误**'
         return render_template('index.html', jaa = msg, jay = ip)
 
 @app.route('/passport',methods=['POST'])
@@ -65,11 +65,15 @@ def zhuce():
     user_email = str(request.form.get('user_email'))
     print(user_email)
     user_phone = str(request.form.get('user_phone'))
-    s = "INSERT into user_info(user_name,user_pass,user_email,phone_num,create_time) VALUES ('%s','%s','%s','%s',NOW())" % (user_name, user_pwd, user_email, user_phone)
-    print(s)
-    insert_user = sql()
-    insert_user.sql_insert(s)
-    return '注册成功'
+    if len(user_name) == 0 or len(user_pwd) == 0:
+        msg = "用户名密码不能为空"
+        return render_template('register.html', empt=msg)
+    else:
+        s = "INSERT into user_info(user_name,user_pass,user_email,phone_num,create_time) VALUES ('%s','%s','%s','%s',NOW())" % (user_name, user_pwd, user_email, user_phone)
+        print(s)
+        insert_user = sql()
+        insert_user.sql_insert(s)
+        return '注册成功'
 
 # @app.route('/user/<name>')
 # def user(name):
