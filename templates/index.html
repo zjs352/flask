@@ -9,13 +9,17 @@
     <h1 style="color: aliceblue">浮士德</h1>
     <i style="color: aliceblue">2019.6.1</i>
     <hr>
-    <form name="form1" action="" method="post">
+    <form name="form1" action="/login" method="post">
+        <a style="color: aliceblue">用户名：</a>
+        <input type="text" name="name">
         <a style="color: aliceblue">密码：</a>
-        <input name="pwd">
-        <input type="button" value="提交" style="width:50px;background-color: lightslategrey;" onclick="check()">
-        <input type="reset" value="重置" style="background-color: lightslategrey;">
+        <input type="password" name="pwd">
+        <input type="submit" value="提交">   <a style="color: aliceblue">{{jaa}}</a>
         <p style="color: aliceblue">IP地址：{{jay}}</p>
         <!--<input type="file">-->
+    </form>
+    <form name="form2" action="/passport" method="post">
+        <input type="submit" value="注册">
     </form>
 </body>
 </html>
