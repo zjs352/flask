@@ -65,7 +65,8 @@ def zhuce():
     user_email = str(request.form.get('user_email'))
     print(user_email)
     user_phone = str(request.form.get('user_phone'))
-    s = "INSERT into user_info(user_name,user_pass,user_email,phone_num,create_time) VALUES (%s,%s,%s,%s,NOW())" % (user_name, user_pwd, user_email, user_phone)
+    s = "INSERT into user_info(user_name,user_pass,user_email,phone_num,create_time) VALUES ('%s','%s','%s','%s',NOW())" % (user_name, user_pwd, user_email, user_phone)
+    print(s)
     insert_user = sql()
     insert_user.sql_insert(s)
     return '注册成功'
