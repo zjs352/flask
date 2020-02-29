@@ -1,3 +1,4 @@
+#coding=utf-8
 from flask import Flask,redirect, url_for,render_template,request, jsonify
 from werkzeug import secure_filename
 
@@ -11,8 +12,9 @@ def guest(g):
     return "hello %s....." % g
 
 @app.route('/')
-def index(name=None):
-    return render_template('index.html', name=name)
+def index():
+    ip = get_ip()
+    return render_template('index.html', jay = ip)
 
 @app.route('/login')
 def login():
@@ -37,9 +39,9 @@ def upload_file():
 @app.route('/ip', methods=['GET'])
 def get_ip():
     if request.environ.get('HTTP_X_FORWARDED_FOR') is None:
-        return jsonify({'ip': request.environ['REMOTE_ADDR']}), 200
+        return request.environ['REMOTE_ADDR']
     else:
-        return jsonify({'ip': request.environ['HTTP_X_FORWARDED_FOR']}), 200
+        return request.environ['HTTP_X_FORWARDED_FOR']
 
 if __name__ == '__main__':
     app.run(port=80,debug='false',host='0.0.0.0')
