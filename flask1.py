@@ -1,11 +1,11 @@
 #coding=utf-8
 from flask import Flask, redirect, url_for, render_template, request, jsonify
 
-
+import os
 import pymysql
 class sql:
     def __init__(self):
-        self.db = pymysql.connect('192.168.0.81', 'root', '*', 'flask')
+        self.db = pymysql.connect('192.168.0.81', 'root', '2009ZJ50', 'flask')
         self.cur = self.db.cursor()
     def sql_insert(self,sql_methed):
         self.methed = sql_methed
@@ -22,13 +22,33 @@ class sql:
         else:
             return 0
 
+def system_status():
+    dic = {}
+    mem = os.popen("free -mh|awk 'NR==2 {print $7}'").read().strip()
+    disk = os.popen("df -h|awk 'NR==2 {print $5}'").read().strip()
+    cpu = os.popen("top -n1|grep '%Cpu(s)'|awk '{print $2}'").read().strip()
+    dic['mem'] = mem
+    dic['disk'] = disk
+    dic['cpu'] = cpu
+    return dic
+
 
 
 app = Flask(__name__)
 
-@app.route('/admin')
+@app.route('/admin',methods=['GET'])
 def admin():
-    return "hello admin!!"
+    cpu_info = system_status()
+    mem = cpu_info['mem']
+    disk = cpu_info['disk']
+    cpu = cpu_info['cpu']
+    if len(mem) == 0:
+        mem = '暂时获取不到'
+    if len(disk) == 0:
+        disk = '暂时获取不到'
+    if len(cpu) == 0:
+        cpu = '暂时获取不到'
+    return render_template('system_status.html',jay_mem=mem, jay_disk=disk, jay_cpu=cpu)
 @app.route('/guest/<g>')
 def guest(g):
     return "hello %s....." % g
@@ -38,15 +58,17 @@ def index():
     ip = get_ip()
     return render_template('index.html', jay = ip)
 
-@app.route('/login', methods=['POST'])
+@app.route('/login', methods=['POST','GET'])
 def login():
     ip = get_ip()
     user = request.form.get('name')
     passwd = request.form.get('pwd')
     sql_login = sql()
     a = sql_login.sql_select(user, passwd)
-    if a == 1:
+    if a == 1 and user != 'admin':
         return render_template('HomePge.html')
+    elif a == 1 and user == 'admin':
+        return redirect('admin')
     elif len(passwd) == 0:
         msg = '**密码不能为空**'
         return render_template('index.html', jaa = msg, jay = ip)
@@ -63,10 +85,12 @@ def zhuce():
     user_name = str(request.form.get('user_name'))
     user_pwd = str(request.form.get('user_pwd'))
     user_email = str(request.form.get('user_email'))
-    print(user_email)
     user_phone = str(request.form.get('user_phone'))
-    if len(user_name) == 0 or len(user_pwd) == 0:
+    if len(user_name.strip()) == 0 or len(user_pwd.strip()) == 0:
         msg = "用户名密码不能为空"
+        return render_template('register.html', empt=msg)
+    elif user_name == 'admin':
+        msg = 'admin已存在'
         return render_template('register.html', empt=msg)
     else:
         s = "INSERT into user_info(user_name,user_pass,user_email,phone_num,create_time) VALUES ('%s','%s','%s','%s',NOW())" % (user_name, user_pwd, user_email, user_phone)
