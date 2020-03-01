@@ -26,7 +26,7 @@ def system_status():
     dic = {}
     mem = os.popen("free -mh|awk 'NR==2 {print $7}'").read().strip()
     disk = os.popen("df -h|awk 'NR==2 {print $5}'").read().strip()
-    cpu = os.popen("top -n1|grep '%Cpu(s)'|awk '{print $2}'").read().strip()
+    cpu = os.popen("top -bn1|grep '%Cpu(s)'|awk '{print $2}'").read().strip()
     dic['mem'] = mem
     dic['disk'] = disk
     dic['cpu'] = cpu
