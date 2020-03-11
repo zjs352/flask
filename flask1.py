@@ -1,11 +1,17 @@
 #coding=utf-8
 from flask import Flask, redirect, url_for, render_template, request, jsonify
-
+from wordcloud import WordCloud
+from os import path
+from PIL import Image
+import numpy as np
+import matplotlib.pyplot as plt
+import jieba
+import uuid
 import os
 import pymysql
 class sql:
     def __init__(self):
-        self.db = pymysql.connect('192.168.0.81', 'root', '', 'flask')
+        self.db = pymysql.connect('192.168.0.81', 'root', '2009ZJ50', 'flask')
         self.cur = self.db.cursor()
     def sql_insert(self,sql_methed):
         self.methed = sql_methed
@@ -36,6 +42,10 @@ def system_status():
 
 app = Flask(__name__)
 
+
+
+
+
 @app.route('/admin',methods=['GET'])
 def admin():
     cpu_info = system_status()
@@ -57,6 +67,27 @@ def guest(g):
 def index():
     ip = get_ip()
     return render_template('index.html', jay = ip)
+
+@app.route('/wcloud', methods=['POST','GET'])
+def wcloud():
+    cloud_text = request.form.get('data').strip()
+    str = '***不能为空***'
+    a = '''"target="_blank"'''
+    if len(cloud_text) == 0:
+        return render_template('index.html', jav=str)
+    else:
+        jpg_name = uuid.uuid4().hex
+        d = path.dirname(r"E:\untitled\词云\\")
+        text = cloud_text
+        mytext = " ".join(jieba.cut(text))
+        alice_mask = np.array(Image.open(path.join(d, "2.jpg")))
+        wc = WordCloud(font_path="E:\\untitled\\词云\\STXINGKA.TTF", background_color="white", max_words=1000000, mask=alice_mask,
+                       stopwords="stopwords", contour_width=3, contour_color="steelblue")
+        wc.generate(mytext)
+        wc.to_file(path.join('E:\\untitled\\网络\\static\\img\\', jpg_name + '.png'))
+        jpg = jpg_name+'.png'
+        return render_template('wcloud.html', jac=jpg)
+
 
 @app.route('/login', methods=['POST','GET'])
 def login():
@@ -123,4 +154,4 @@ def get_ip():
         return request.environ['HTTP_X_FORWARDED_FOR']
 
 if __name__ == '__main__':
-    app.run(port=80, host='0.0.0.0')
+    app.run(port=80, debug='false', host='0.0.0.0')

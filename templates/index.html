@@ -5,6 +5,7 @@
     <title>博客</title>
     <script type="text/javascript" src="js/script.js"></script>
 </head>
+<audio autoplay="autopaly"><source src="{{url_for('static',filename='video/music.mp3')}}" type="audio/mp3" /></audio>
 <body bgcolor="black">
     <h1 style="color: aliceblue">浮士德</h1>
     <i style="color: aliceblue">2019.6.1</i>
@@ -18,8 +19,18 @@
         <p style="color: aliceblue">IP地址：{{jay}}</p>
         <!--<input type="file">-->
     </form>
-    <form name="form2" action="/passport" method="post">
+    <form name="form2" action="/passport" method="post" target="_blank">
         <input type="submit" value="注册">
+    </form>
+    <br>
+    <br>
+    <form name="form2" action="wcloud" method="post" {{jad}}>
+        <a style="color: aliceblue">
+            词云：
+        </a>
+        <textarea type="text" name="data" style="width: 600px;height: 300px">
+        </textarea>
+        <input type="submit" value="提交"><a style="color: red">{{jav}}</a>
     </form>
 </body>
 </html>
