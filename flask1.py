@@ -11,7 +11,7 @@ import os
 import pymysql
 class sql:
     def __init__(self):
-        self.db = pymysql.connect('192.168.0.81', 'root', '2009ZJ50', 'flask')
+        self.db = pymysql.connect('192.168.0.81', 'root', '*', 'flask')
         self.cur = self.db.cursor()
     def sql_insert(self,sql_methed):
         self.methed = sql_methed
